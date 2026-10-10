@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Mijn ideeën & gevoelens</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@600;800&display=swap">
+<style>
+:root{--bg:#e8f6ff;--card:#fff;--ink:#1f2a44;--muted:#5d6b88;--line:#cfe3f3;--sun:#ffcf3f;--pick:#ffe9a3;--coral:#ff6b57;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#141b2e;--card:#1f2942;--ink:#f1f4fb;--muted:#a3afc9;--line:#33405f;--pick:#5a4a14}}
+:root[data-theme="dark"]{--bg:#141b2e;--card:#1f2942;--ink:#f1f4fb;--muted:#a3afc9;--line:#33405f;--pick:#5a4a14}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Nunito","Trebuchet MS",system-ui,sans-serif;font-weight:600;font-size:18px;line-height:1.4}
+main{max-width:34rem;margin:0 auto;padding:1.25rem 1rem 3rem}
+h1{font-size:1.9rem;font-weight:800;margin:.2rem 0 1rem}
+h2{font-size:1.2rem;font-weight:800;margin:0 0 .75rem}
+.tabs{display:flex;gap:.5rem;margin-bottom:1rem}
+.tabs button{flex:1;padding:.7rem;border:2px solid var(--line);border-radius:1rem;background:var(--card);color:var(--ink);font:inherit;font-weight:800;cursor:pointer}
+.tabs button[aria-selected="true"]{background:var(--sun);border-color:var(--sun);color:#1f2a44}
+section{background:var(--card);border:2px solid var(--line);border-radius:1.25rem;padding:1rem;margin-bottom:1rem}
+.moods{display:grid;grid-template-columns:repeat(3,1fr);gap:.6rem}
+.moods button{display:flex;flex-direction:column;align-items:center;gap:.2rem;padding:.7rem .2rem;border:3px solid var(--line);border-radius:1.2rem;background:var(--bg);color:var(--ink);font:inherit;cursor:pointer}
+.moods .e{font-size:2.4rem;line-height:1}
+.moods button[aria-pressed="true"]{border-color:var(--coral);background:var(--pick)}
+input[type=text]{width:100%;padding:.75rem .9rem;border:2px solid var(--line);border-radius:1rem;background:var(--bg);color:var(--ink);font:inherit;margin:.75rem 0}
+.go{width:100%;padding:.85rem;border:0;border-radius:1rem;background:var(--coral);color:#fff;font:inherit;font-weight:800;font-size:1.1rem;cursor:pointer}
+.go:disabled{opacity:.45;cursor:default}
+:focus-visible{outline:3px solid var(--ink);outline-offset:2px}
+ul{list-style:none;margin:0;padding:0}
+li{display:flex;align-items:center;gap:.6rem;padding:.7rem 0;border-top:2px solid var(--line)}
+li:first-child{border-top:0}
+li .t{flex:1;overflow-wrap:anywhere}
+li small{display:block;color:var(--muted);font-weight:600;font-size:.8rem}
+li button{border:0;background:none;font-size:1.5rem;cursor:pointer;padding:.2rem;color:var(--ink)}
+.empty{color:var(--muted);margin:0}
+.saved{min-height:1.4em;margin:.5rem 0 0;color:var(--muted);text-align:center}
+.bk{display:flex;gap:.6rem}
+.bk button{flex:1;padding:.75rem;border:2px solid var(--line);border-radius:1rem;background:var(--bg);color:var(--ink);font:inherit;font-weight:800;cursor:pointer}
+.hint{color:var(--muted);font-size:.9rem;margin:0 0 .75rem}
+[hidden]{display:none!important}
+@media (prefers-reduced-motion:no-preference){.moods button{transition:transform .12s}.moods button[aria-pressed="true"]{transform:scale(1.06)}}
+</style>
+</head>
+<body>
+<main>
+<h1>Mijn ideeën & gevoelens</h1>
+<div class="tabs" role="tablist">
+  <button role="tab" id="tab-f" aria-selected="true" aria-controls="p-f">Gevoel</button>
+  <button role="tab" id="tab-i" aria-selected="false" aria-controls="p-i">Ideeën</button>
+</div>
+
+<div id="p-f" role="tabpanel" aria-labelledby="tab-f">
+  <section>
+    <h2>Hoe voel je je nu?</h2>
+    <div class="moods" id="moods"></div>
+    <input type="text" id="note" maxlength="120" placeholder="Wil je er iets bij schrijven? (hoeft niet)" aria-label="Notitie bij je gevoel">
+    <button class="go" id="saveF" disabled>Bewaar mijn gevoel</button>
+    <p class="saved" id="savedF" aria-live="polite"></p>
+  </section>
+  <section>
+    <h2>Mijn gevoelens</h2>
+    <ul id="listF"></ul><p class="empty" id="emptyF">Nog niets bewaard. Kies hierboven een gezichtje.</p>
+  </section>
+</div>
+
+<div id="p-i" role="tabpanel" aria-labelledby="tab-i" hidden>
+  <section>
+    <h2>Heb je een idee?</h2>
+    <input type="text" id="idea" maxlength="160" placeholder="Schrijf je idee op" aria-label="Je idee">
+    <button class="go" id="saveI" disabled>Bewaar mijn idee</button>
+  </section>
+  <section>
+    <h2>Mijn ideeën</h2>
+    <ul id="listI"></ul><p class="empty" id="emptyI">Nog geen ideeën. Schrijf je eerste idee hierboven.</p>
+  </section>
+</div>
+<section>
+  <h2>Bewaren</h2>
+  <p class="hint">Maak een back-up als bestand, zodat er niets kwijtraakt. Je kunt die later weer terugzetten.</p>
+  <div class="bk">
+    <button type="button" id="exp">Bewaar als bestand</button>
+    <button type="button" id="imp">Open bestand</button>
+  </div>
+  <input type="file" id="file" accept=".json,application/json" hidden>
+  <p class="saved" id="bmsg" aria-live="polite"></p>
+</section>
+</main>
+
+<script>
+(function(){
+var MOODS=[["😄","Blij"],["😌","Rustig"],["😠","Boos"],["😢","Verdrietig"],["😨","Bang"],["😴","Moe"]];
+var KEY="kids-ideeen-gevoelens-v1";
+var data={f:[],i:[]};
+try{var raw=localStorage.getItem(KEY);if(raw){var p=JSON.parse(raw);if(p&&Array.isArray(p.f)&&Array.isArray(p.i))data=p;}}catch(e){}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(data));}catch(e){}}
+function $(id){return document.getElementById(id);}
+function when(ts){var d=new Date(ts);return d.toLocaleDateString("nl-BE",{weekday:"long",day:"numeric",month:"long"})+" om "+d.toLocaleTimeString("nl-BE",{hour:"2-digit",minute:"2-digit"});}
+var chosen=-1;
+var moodsEl=$("moods");
+MOODS.forEach(function(m,i){
+  var b=document.createElement("button");b.type="button";b.setAttribute("aria-pressed","false");
+  b.innerHTML='<span class="e" aria-hidden="true">'+m[0]+'</span><span>'+m[1]+'</span>';
+  b.onclick=function(){chosen=i;[].forEach.call(moodsEl.children,function(c,j){c.setAttribute("aria-pressed",j===i?"true":"false");});$("saveF").disabled=false;$("savedF").textContent="";};
+  moodsEl.appendChild(b);
+});
+function row(emoji,text,sub,onDel,onStar,starred){
+  var li=document.createElement("li");
+  var e=document.createElement("span");e.textContent=emoji;e.style.fontSize="1.8rem";e.setAttribute("aria-hidden","true");li.appendChild(e);
+  var t=document.createElement("span");t.className="t";t.textContent=text;
+  var s=document.createElement("small");s.textContent=sub;t.appendChild(s);li.appendChild(t);
+  if(onStar){var st=document.createElement("button");st.type="button";st.textContent=starred?"⭐":"☆";st.setAttribute("aria-label",starred?"Haal ster weg":"Geef een ster");st.onclick=onStar;li.appendChild(st);}
+  var d=document.createElement("button");d.type="button";d.textContent="🗑️";d.setAttribute("aria-label","Verwijder");d.onclick=onDel;li.appendChild(d);
+  return li;
+}
+function render(){
+  var lf=$("listF");lf.textContent="";
+  data.f.forEach(function(x,idx){lf.appendChild(row(MOODS[x.m][0],MOODS[x.m][1]+(x.n?": "+x.n:""),when(x.t),function(){data.f.splice(idx,1);save();render();}));});
+  $("emptyF").hidden=data.f.length>0;
+  var li=$("listI");li.textContent="";
+  var order=data.i.map(function(x,k){return{x:x,k:k};}).sort(function(a,b){return (b.x.s?1:0)-(a.x.s?1:0)||b.x.t-a.x.t;});
+  order.forEach(function(o){li.appendChild(row("💡",o.x.text,when(o.x.t),function(){data.i.splice(o.k,1);save();render();},function(){o.x.s=!o.x.s;save();render();},o.x.s));});
+  $("emptyI").hidden=data.i.length>0;
+}
+$("saveF").onclick=function(){
+  if(chosen<0)return;
+  data.f.unshift({m:chosen,n:$("note").value.trim(),t:Date.now()});save();
+  $("note").value="";chosen=-1;$("saveF").disabled=true;
+  [].forEach.call(moodsEl.children,function(c){c.setAttribute("aria-pressed","false");});
+  $("savedF").textContent="Bewaard!";render();
+};
+var ideaEl=$("idea");
+ideaEl.oninput=function(){$("saveI").disabled=!ideaEl.value.trim();};
+function addIdea(){var v=ideaEl.value.trim();if(!v)return;data.i.unshift({text:v,t:Date.now(),s:false});save();ideaEl.value="";$("saveI").disabled=true;render();}
+$("saveI").onclick=addIdea;
+ideaEl.onkeydown=function(e){if(e.key==="Enter")addIdea();};
+function tab(which){
+  var f=which==="f";
+  $("p-f").hidden=!f;$("p-i").hidden=f;
+  $("tab-f").setAttribute("aria-selected",f);$("tab-i").setAttribute("aria-selected",!f);
+}
+$("tab-f").onclick=function(){tab("f");};
+$("tab-i").onclick=function(){tab("i");};
+var dl=null,dlReady=(async function(){
+  try{if(window.claude&&claude.use)dl=await claude.use("downloads");}catch(e){}
+})();
+$("exp").onclick=async function(){
+  var txt=JSON.stringify({v:1,f:data.f,i:data.i},null,1),name="ideeen-en-gevoelens-back-up.json",m=$("bmsg");
+  await dlReady;
+  try{
+    if(dl){await dl.save({filename:name,data:txt});}
+    else if(window.claude){m.textContent="Bewaren kan hier niet. Open de pagina in je gewone browser.";return;}
+    else{var a=document.createElement("a");a.href=URL.createObjectURL(new Blob([txt],{type:"application/json"}));a.download=name;a.click();}
+    m.textContent="Back-up gemaakt.";
+  }catch(e){m.textContent=(e&&e.code==="declined")?"Niet bewaard.":"Bewaren lukt hier niet.";}
+};
+$("imp").onclick=function(){$("file").click();};
+$("file").onchange=function(){
+  var inp=this,f=inp.files&&inp.files[0],m=$("bmsg");
+  if(!f)return;
+  var r=new FileReader();
+  r.onload=function(){
+    try{
+      var p=JSON.parse(r.result),added=0;
+      var seenF={},seenI={};
+      data.f.forEach(function(x){seenF[x.t+"|"+x.m]=1;});
+      data.i.forEach(function(x){seenI[x.t+"|"+x.text]=1;});
+      (Array.isArray(p.f)?p.f:[]).forEach(function(x){
+        if(x&&Number.isInteger(x.m)&&x.m>=0&&x.m<MOODS.length&&typeof x.t==="number"&&!seenF[x.t+"|"+x.m]){data.f.push({m:x.m,n:typeof x.n==="string"?x.n.slice(0,120):"",t:x.t});seenF[x.t+"|"+x.m]=1;added++;}
+      });
+      (Array.isArray(p.i)?p.i:[]).forEach(function(x){
+        if(x&&typeof x.text==="string"&&x.text.trim()&&typeof x.t==="number"&&!seenI[x.t+"|"+x.text]){data.i.push({text:x.text.slice(0,160),t:x.t,s:!!x.s});seenI[x.t+"|"+x.text]=1;added++;}
+      });
+      data.f.sort(function(a,b){return b.t-a.t;});
+      data.i.sort(function(a,b){return b.t-a.t;});
+      save();render();
+      m.textContent=added?added+" nieuwe items teruggezet.":"Er stond niets nieuws in dit bestand.";
+    }catch(e){m.textContent="Dit bestand kan ik niet lezen. Kies een back-up van deze app.";}
+    inp.value="";
+  };
+  r.onerror=function(){m.textContent="Dit bestand kan ik niet openen.";};
+  r.readAsText(f);
+};
+render();
+})();
+</script>
+</body>
+</html>
